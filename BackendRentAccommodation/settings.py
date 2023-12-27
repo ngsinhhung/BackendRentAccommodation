@@ -12,6 +12,18 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 
+# cloundinary libary
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
+
+cloudinary.config(
+  cloud_name = "dmdljcwau",
+  api_key = "751729637915529",
+  api_secret = "-9greGmb76IjiPCDjePMEPuuz1I",
+  secure = True
+)
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -37,7 +49,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'RentApp.apps.RentappConfig',
+    'cloudinary',
 ]
+
+AUTH_USER_MODEL = 'RentApp.User'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -77,7 +93,7 @@ WSGI_APPLICATION = 'BackendRentAccommodation.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'supportappdb',
+        'NAME': 'testdb',
         'USER': 'root',
         'PASSWORD': 'Sinhhung1212@',
         'HOST': ''
