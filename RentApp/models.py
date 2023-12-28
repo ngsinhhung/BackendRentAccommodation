@@ -2,7 +2,6 @@ from cloudinary.models import CloudinaryField
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-from django.utils.translation import gettext_lazy as _
 # Create your models here.
 
 class BaseModel(models.Model):
@@ -15,13 +14,13 @@ class BaseModel(models.Model):
 
 
 class User(AbstractUser):
-    avatar_user = CloudinaryField('avatar', null = True)
-    phone = models.CharField(max_length=15, null=True)
+    avatar_user = CloudinaryField('avatar', null = True, blank = True)
+    phone = models.CharField(max_length=15, null=True, blank = True)
     date_joined = models.DateField(auto_now_add=True)
     class Role(models.TextChoices):
-        ADMIN = 'ADMIN', _('Quản trị viên')
-        HOST = 'HOST', _('Chủ nhà')
-        TENANT = "TENANT", _('Người thuê')
+        ADMIN = 'ADMIN', ('Quản trị viên')
+        HOST = 'HOST', ('Chủ nhà')
+        TENANT = "TENANT", ('Người thuê')
 
     role = models.CharField(max_length=6, choices=Role.choices, default=Role.TENANT)
 
@@ -50,7 +49,8 @@ class Post(BaseModel):
     user_post = models.ForeignKey('User', on_delete=models.CASCADE, related_name='post')
     accommodation = models.ForeignKey('Accommodation', on_delete=models.CASCADE, related_name='post_accommodation')
 
-
+class Comment(models.Model):
+    pass
 
 class Image(models.Model):
     image = CloudinaryField('image', null = True)
