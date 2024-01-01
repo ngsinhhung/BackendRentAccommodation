@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'RentApp.apps.RentappConfig',
     'cloudinary',
+    'rest_framework',
 ]
 
 AUTH_USER_MODEL = 'RentApp.User'

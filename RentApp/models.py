@@ -30,8 +30,8 @@ class User(AbstractUser):
         return self.username
 
 class Follow(models.Model):
-    follower = models.ForeignKey('User', on_delete=models.CASCADE, related_name='followerrr')
-    following = models.ForeignKey('User', on_delete=models.CASCADE, related_name='followinggg')
+    follower = models.ForeignKey('User', on_delete=models.CASCADE, related_name='follower')
+    following = models.ForeignKey('User', on_delete=models.CASCADE, related_name='following')
 
 class Accommodation(BaseModel):
     onwer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='accommodation')
@@ -44,13 +44,27 @@ class Accommodation(BaseModel):
     is_verified = models.BooleanField(default=False, choices=[(True, 'Verified'), (False, 'Not Verified')])
     is_rented = models.BooleanField(default=False, choices=[(True, 'Rented'), (False, 'Not Rent')])
 
+    def __str(self):
+        return f'Accommodation_of_{self.onwer.username}'
+
 class Post(BaseModel):
     content = models.TextField()
     user_post = models.ForeignKey('User', on_delete=models.CASCADE, related_name='post')
     accommodation = models.ForeignKey('Accommodation', on_delete=models.CASCADE, related_name='post_accommodation')
 
+    def __str__(self):
+        return f'Post_{self.post.id}'
+
 class Comment(models.Model):
-    pass
+    text = models.TextField()
+    user_comment = models.ForeignKey('User', on_delete=models.CASCADE, related_name='user_comment')
+    post = models.ForeignKey('Post', on_delete=models.CASCADE, related_name='post_comment')
+    created_at = models.DateTimeField(auto_now=True)
+    reply = models.ForeignKey('self', on_delete=models.CASCADE, related_name='reply_comment', null=True, blank=True)
+
+    def __str__(self):
+        return f'{self.user_comment.username} comment {self.post.post_id}'
+
 
 class Image(models.Model):
     image = CloudinaryField('image', null = True)
@@ -58,4 +72,13 @@ class Image(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.post
+        return f'Image_post_{self.post.id}'
+
+class Notification(models.Model):
+    user = models.ForeignKey('User', on_delete=models.CASCADE, related_name='notifications')
+    notice = models.TextField()
+    created_at = models.DateTimeField(auto_now=True)
+    is_read = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f'Notify_{self.id}_of_{self.user.username}'
