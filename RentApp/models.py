@@ -60,7 +60,7 @@ class Comment(models.Model):
     user_comment = models.ForeignKey('User', on_delete=models.CASCADE, related_name='user_comment')
     post = models.ForeignKey('Post', on_delete=models.CASCADE, related_name='post_comment')
     created_at = models.DateTimeField(auto_now=True)
-    reply = models.ForeignKey('self', on_delete=models.CASCADE, related_name='reply_comment', null=True, blank=True)
+    parent_comment = models.ForeignKey('self', on_delete=models.CASCADE, related_name='reply_comment', null=True, blank=True)
 
     def __str__(self):
         return f'{self.user_comment.username} comment {self.post.post_id}'

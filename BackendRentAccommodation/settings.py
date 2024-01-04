@@ -52,7 +52,13 @@ INSTALLED_APPS = [
     'RentApp.apps.RentappConfig',
     'cloudinary',
     'rest_framework',
+    'rest_framework_swagger',
+    'drf_yasg',
 ]
+
+REST_FRAMEWORK = {
+
+}
 
 AUTH_USER_MODEL = 'RentApp.User'
 
