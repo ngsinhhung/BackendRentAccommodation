@@ -3,11 +3,13 @@ from rest_framework.serializers import ModelSerializer
 from .models import *
 
 class UserSerializer(ModelSerializer):
+    role = User.get_role()
     class Meta:
         model = User
-        fields = ["first_name", "last_name", "email", "username", "password", "avatar_user", "phone", "role"]
+        fields = ['first_name', 'last_name', 'email', 'username', 'password', 'avatar_user', 'phone', 'role']
         extra_kwargs = {
-            "password": {"write_only": True}
+            'password': {'write_only': True},
+            # 'avatar_user': {'allow_null': False, 'required': True}
         }
     def create(self, validated_data):
         data = validated_data.copy()
@@ -21,27 +23,15 @@ class ImageSerializer(ModelSerializer):
         model = Image
         fields = ['image', 'created_at']
 
-class AccommodationSerializers(ModelSerializer):
+class AccommodationSerializer(ModelSerializer):
     onwer = UserSerializer()
     class Meta:
         model = Accommodation
-        fields = ["__all__"]
-
-class PostSerializers(ModelSerializer):
-    user_post = UserSerializer()
-    image = SerializerMethodField()
-    class Meta:
-        model = Post
-        fields = ['content', 'user_post', 'accommodation', 'image']
-
-    def get_image(self, obj):
-        image = Image.objects.filter(post_id=obj.id)
-        serializer = PostSerializers(image, many=True)
-
-        return serializer.data
+        fields = ['__all__']
 
 
-class CommentSerializers(ModelSerializer):
+
+class CommentSerializer(ModelSerializer):
     reply = SerializerMethodField()
     class Meta:
         model = Comment
@@ -49,11 +39,24 @@ class CommentSerializers(ModelSerializer):
 
     def get_reply(self, obj):
         reply = Comment.objects.filter(parent_comment=obj)
-        serializer = CommentSerializers(reply, many=True)
+        serializer = CommentSerializer(reply, many=True)
+        return serializer.data
 
+class PostSerializer(ModelSerializer):
+    user_post = UserSerializer()
+    image = SerializerMethodField()
+    comment = CommentSerializer()
+    class Meta:
+        model = Post
+        fields = ['content', 'user_post', 'accommodation', 'image', 'comment']
 
+    def get_image(self, obj):
+        image = Image.objects.filter(post_id=obj.id)
+        serializer = PostSerializer(image, many=True)
 
-class NotificationsSerializers(ModelSerializer):
+        return serializer.data
+
+class NotificationsSerializer(ModelSerializer):
     class Meta:
         model = Notification
-        fields = ["__all__"]
+        fields = ['__all__']

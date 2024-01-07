@@ -1,17 +1,17 @@
 from django.shortcuts import render
-from django.views import generic
 from rest_framework import viewsets, status, generics, parsers
 from rest_framework.decorators import action
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
 from .models import *
-from .serializers import UserSerializer, AccommodationSerializers, PostSerializers, ImageSerializer
+from .serializers import UserSerializer, CommentSerializer, AccommodationSerializer, PostSerializer, ImageSerializer
 
 # Create your views here.
 class UserViewSet(viewsets.ModelViewSet, generics.ListAPIView, generics.CreateAPIView , generics.RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    parser_classes = [parsers.MultiPartParser]
+    permission_classes = [AllowAny]
 
     @action(methods=['POST'], detail=False , url_path='register', url_name='register')
     def register_user(self, request):
@@ -24,7 +24,7 @@ class UserViewSet(viewsets.ModelViewSet, generics.ListAPIView, generics.CreateAP
 
 class AccommodationViewSet(viewsets.ModelViewSet, generics.ListAPIView):
     queryset = Accommodation.objects.all()
-    serializer_class = AccommodationSerializers
+    serializer_class = AccommodationSerializer
 
 class ImageViewSet(viewsets.ModelViewSet, generics.ListAPIView):
     queryset = Image.objects.all()
@@ -32,10 +32,8 @@ class ImageViewSet(viewsets.ModelViewSet, generics.ListAPIView):
 
 class PostViewSet(viewsets.ModelViewSet, generics.ListAPIView, generics.CreateAPIView):
     queryset = Post.objects.all()
-    serializer_class = PostSerializers
+    serializer_class = PostSerializer
 
-
-
-
-
-
+class CommentViewSet(viewsets.ModelViewSet, generics.ListAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer

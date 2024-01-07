@@ -6,6 +6,7 @@ router = routers.DefaultRouter()
 router.register('users', UserViewSet, basename='users')
 router.register('accommodations', AccommodationViewSet, basename='accommodations')
 router.register('post', PostViewSet, basename='post')
+router.register('comment', CommentViewSet, basename='comment')
 
 
 urlpatterns = [
