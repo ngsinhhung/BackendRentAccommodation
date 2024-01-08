@@ -4,7 +4,6 @@ from .models import *
 
 class UserSerializer(ModelSerializer):
     avatar_user = SerializerMethodField(source='avatar_user')
-
     def get_avatar_user(self, user):
         if user.avatar_user:
             request = self.context.get('request')
@@ -26,18 +25,11 @@ class UserSerializer(ModelSerializer):
         user.save()
         return user
 
-class ImageSerializer(ModelSerializer):
-    class Meta:
-        model = Image
-        fields = ['image', 'created_at']
-
 class AccommodationSerializer(ModelSerializer):
     onwer = UserSerializer()
     class Meta:
         model = Accommodation
         fields = ['__all__']
-
-
 
 class CommentSerializer(ModelSerializer):
     reply = SerializerMethodField()
@@ -45,25 +37,16 @@ class CommentSerializer(ModelSerializer):
         model = Comment
         fields = ['text','user_comment', 'post', 'created_at', 'reply']
 
-    def get_reply(self, obj):
-        reply = Comment.objects.filter(parent_comment=obj)
-        serializer = CommentSerializer(reply, many=True)
-        return serializer.data
-
 class PostSerializer(ModelSerializer):
     user_post = UserSerializer()
     image = SerializerMethodField()
-    comment = CommentSerializer()
     class Meta:
         model = Post
-        fields = ['content', 'user_post', 'accommodation', 'image', 'comment']
-
-    def get_image(self, obj):
-        image = Image.objects.filter(post_id=obj.id)
-        serializer = PostSerializer(image, many=True)
-
-        return serializer.data
-
+        fields = ['content', 'user_post', 'accommodation','image']
+class ImageSerializer(ModelSerializer):
+    class Meta:
+        model = Image
+        fields = ['image', 'created_at']
 class NotificationsSerializer(ModelSerializer):
     class Meta:
         model = Notification

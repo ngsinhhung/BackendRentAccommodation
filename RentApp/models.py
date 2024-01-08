@@ -44,7 +44,7 @@ class Accommodation(BaseModel):
     is_rented = models.BooleanField(default=False, choices=[(True, 'Rented'), (False, 'Not Rent')])
 
     def __str(self):
-        return f'Accommodation_of_{self.onwer.username}'
+        return self.address
 
 class Post(BaseModel):
     content = models.TextField()
@@ -52,7 +52,7 @@ class Post(BaseModel):
     accommodation = models.ForeignKey('Accommodation', on_delete=models.CASCADE, related_name='post_accommodation')
 
     def __str__(self):
-        return f'Post_{self.post.id}'
+        return f'Post_{self.post.content}'
 
 class Comment(models.Model):
     text = models.TextField()

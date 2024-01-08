@@ -7,7 +7,7 @@ from rest_framework import  permissions
 from .models import *
 from .serializers import UserSerializer, CommentSerializer, AccommodationSerializer, PostSerializer, ImageSerializer
 import cloudinary.uploader
-
+from rest_framework.parsers import MultiPartParser, FormParser
 class UserViewSet(viewsets.ModelViewSet, generics.ListAPIView, generics.RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
@@ -76,16 +76,25 @@ class PostViewSet(viewsets.ModelViewSet, generics.ListAPIView, generics.CreateAP
     queryset = Post.objects.all()
     serializer_class = PostSerializer
     permission_classes = [OwnerAuAuthenticate]
+    parser_classes=[MultiPartParser,FormParser]
+    @action(methods=['POST'], detail=False, url_path='create_post', url_name='create-post')
+    def create_post(self, request):
+        try:
+            content = request.data.get('content')
+            user_post = request.data.get('user_post')
+            accommodation = request.data.get('accommodation')
 
-class AccommodationViewSet(viewsets.ModelViewSet, generics.ListAPIView):
-    queryset = Accommodation.objects.all()
-    serializer_class = AccommodationSerializer
+        except Exception as e:
+            print(f"Error: {str(e)}")
+            return Response({'error': 'Error creating post'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class ImageViewSet(viewsets.ModelViewSet, generics.ListAPIView):
     queryset = Image.objects.all()
     serializer_class = ImageSerializer
 
-
+class AccommodationViewSet(viewsets.ModelViewSet, generics.ListAPIView):
+    queryset = Accommodation.objects.all()
+    serializer_class = AccommodationSerializer
 
 class CommentViewSet(viewsets.ModelViewSet, generics.ListAPIView):
     queryset = Comment.objects.all()
