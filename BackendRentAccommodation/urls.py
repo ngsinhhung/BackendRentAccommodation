@@ -25,5 +25,6 @@ schema_view = get_swagger_view(title='Pastebin API')
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('RentApp.urls')),
+    path('o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
 
 ]

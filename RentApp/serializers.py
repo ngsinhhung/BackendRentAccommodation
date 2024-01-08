@@ -3,9 +3,18 @@ from rest_framework.serializers import ModelSerializer
 from .models import *
 
 class UserSerializer(ModelSerializer):
+    avatar_user = SerializerMethodField(source='avatar_user')
+
+    def get_avatar_user(self, user):
+        if user.avatar_user:
+            request = self.context.get('request')
+            if request:
+                return request.build_absolute_uri(user.avatar_user)
+            return user.avatar_user.url
+        return None
     class Meta:
         model = User
-        fields = ['first_name', 'last_name', 'email', 'username', 'password', 'avatar_user', 'phone', 'role']
+        fields = ['id','first_name', 'last_name', 'email', 'username', 'password', 'avatar_user', 'phone', 'role']
         extra_kwargs = {
             'password': {'write_only': True},
             # 'avatar_user': {'allow_null': False, 'required': True}

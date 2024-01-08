@@ -18,10 +18,10 @@ import cloudinary.uploader
 import cloudinary.api
 
 cloudinary.config(
-  cloud_name = "dmdljcwau",
-  api_key = "751729637915529",
-  api_secret = "-9greGmb76IjiPCDjePMEPuuz1I",
-  secure = True
+    cloud_name="dwvg5xlum",
+    api_key="922611133231776",
+    api_secret="Q0bJhJc_3Z06xk1mFMf0oDSgWxo",
+    secure=True
 )
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -54,10 +54,13 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_swagger',
     'drf_yasg',
+    'oauth2_provider',
 ]
 
 REST_FRAMEWORK = {
-
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
+    )
 }
 
 AUTH_USER_MODEL = 'RentApp.User'
@@ -102,7 +105,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'testdb',
         'USER': 'root',
-        'PASSWORD': 'Sinhhung1212@',
+        'PASSWORD': '120900',
         'HOST': ''
     }
 }
@@ -148,3 +151,4 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+LOGIN_URL = '/admin/login/'
