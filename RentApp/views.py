@@ -67,7 +67,6 @@ class UserViewSet(viewsets.ModelViewSet, generics.ListAPIView, generics.Retrieve
             user = self.get_object()
             serialized_user = UserSerializer(user, context={'request': request}).data
             return Response(data=serialized_user, status=status.HTTP_200_OK)
-            pass
         except Exception as e:
             print(f"Error: {str(e)}")
             return Response({'error': 'Error updating user'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
@@ -83,6 +82,7 @@ class PostViewSet(viewsets.ModelViewSet, generics.ListAPIView, generics.CreateAP
             content = request.data.get('content')
             user_post = request.data.get('user_post')
             accommodation = request.data.get('accommodation')
+            
 
         except Exception as e:
             print(f"Error: {str(e)}")

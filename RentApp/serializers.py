@@ -16,7 +16,6 @@ class UserSerializer(ModelSerializer):
         fields = ['id','first_name', 'last_name', 'email', 'username', 'password', 'avatar_user', 'phone', 'role']
         extra_kwargs = {
             'password': {'write_only': True},
-            # 'avatar_user': {'allow_null': False, 'required': True}
         }
     def create(self, validated_data):
         data = validated_data.copy()
@@ -26,7 +25,7 @@ class UserSerializer(ModelSerializer):
         return user
 
 class AccommodationSerializer(ModelSerializer):
-    onwer = UserSerializer()
+    owner = UserSerializer()
     class Meta:
         model = Accommodation
         fields = ['__all__']
@@ -35,14 +34,26 @@ class CommentSerializer(ModelSerializer):
     reply = SerializerMethodField()
     class Meta:
         model = Comment
-        fields = ['text','user_comment', 'post', 'created_at', 'reply']
+        fields = ['text', 'user_comment', 'post', 'created_at', 'reply']
+
+    def get_reply(self, obj):
+        reply = Comment.objects.filter(parent_comment=obj)
+        serializer = CommentSerializer(reply, many=True)
+        return serializer.data
 
 class PostSerializer(ModelSerializer):
     user_post = UserSerializer()
     image = SerializerMethodField()
+    # comment = CommentSerializer()
     class Meta:
         model = Post
         fields = ['content', 'user_post', 'accommodation','image']
+
+    def get_image(self, obj):
+        image = Image.objects.filter(post_id=obj.id)
+        serializer = ImageSerializer(image, many=True)
+        return serializer.data
+
 class ImageSerializer(ModelSerializer):
     class Meta:
         model = Image
