@@ -46,7 +46,7 @@ class Accommodation(BaseModel):
     def __str(self):
         return self.address
 
-class Post(BaseModel):
+class Post(models.Model):
     content = models.TextField()
     user_post = models.ForeignKey('User', on_delete=models.CASCADE, related_name='post')
     accommodation = models.ForeignKey('Accommodation', on_delete=models.CASCADE, related_name='post_accommodation')
@@ -54,6 +54,13 @@ class Post(BaseModel):
     def __str__(self):
         return f'Post_{self.post.content}'
 
+class Image(models.Model):
+    image = CloudinaryField('image', null = True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    post = models.ForeignKey('Post', on_delete=models.CASCADE, related_name='post',null=True)
+    accommodation = models.ForeignKey('Accommodation', on_delete=models.CASCADE, related_name='accommodation',null=True)
+    def __str__(self):
+        return f'Image_post_{self.post.id}'
 class Comment(models.Model):
     text = models.TextField()
     user_comment = models.ForeignKey('User', on_delete=models.CASCADE, related_name='user_comment')
@@ -65,13 +72,6 @@ class Comment(models.Model):
         return f'{self.user_comment.username} comment {self.post.post_id}'
 
 
-class Image(models.Model):
-    image = CloudinaryField('image', null = True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    post = models.ForeignKey('Post', on_delete=models.CASCADE, related_name='post')
-    accommodation = models.ForeignKey('Accommodation', on_delete=models.CASCADE, related_name='accommodation')
-    def __str__(self):
-        return f'Image_post_{self.post.id}'
 
 class Notification(models.Model):
     user = models.ForeignKey('User', on_delete=models.CASCADE, related_name='notifications')

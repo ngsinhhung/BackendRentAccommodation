@@ -80,9 +80,22 @@ class PostViewSet(viewsets.ModelViewSet, generics.ListAPIView, generics.CreateAP
     def create_post(self, request):
         try:
             content = request.data.get('content')
-            user_post = request.data.get('user_post')
-            accommodation = request.data.get('accommodation')
-            
+            user = request.user
+            accommodation =  Accommodation.objects.get(pk=request.data.get('accommodation'))
+            post_data =  Post.objects.create(
+                content = content,
+                user_post =  user,
+                accommodation =  accommodation,
+            )
+
+            for files in request.FILES.getlist('image'):
+                image_post = cloudinary.uploader.upload(files, folder='post_image/')
+                image_post_url = image_post['secure_url']
+                Image.objects.create(
+                    image = image_post_url,
+                    post =  post_data
+                )
+            return Response(data=PostSerializer(post_data).data, status=status.HTTP_201_CREATED)
 
         except Exception as e:
             print(f"Error: {str(e)}")

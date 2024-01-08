@@ -25,10 +25,10 @@ class UserSerializer(ModelSerializer):
         return user
 
 class AccommodationSerializer(ModelSerializer):
-    owner = UserSerializer()
+    onwer = UserSerializer()
     class Meta:
         model = Accommodation
-        fields = ['__all__']
+        fields = '__all__'
 
 class CommentSerializer(ModelSerializer):
     reply = SerializerMethodField()
@@ -42,6 +42,7 @@ class CommentSerializer(ModelSerializer):
         return serializer.data
 
 class PostSerializer(ModelSerializer):
+    accommodation = AccommodationSerializer()
     user_post = UserSerializer()
     image = SerializerMethodField()
     # comment = CommentSerializer()
@@ -61,4 +62,4 @@ class ImageSerializer(ModelSerializer):
 class NotificationsSerializer(ModelSerializer):
     class Meta:
         model = Notification
-        fields = ['__all__']
+        fields = '__all__'
