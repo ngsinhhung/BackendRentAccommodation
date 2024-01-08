@@ -16,7 +16,6 @@ class BaseModel(models.Model):
 class User(AbstractUser):
     avatar_user = CloudinaryField('avatar', null = True, blank = True)
     phone = models.CharField(max_length=15, null=True, blank = True)
-    date_joined = models.DateField(auto_now_add=True)
     class Role(models.TextChoices):
         ADMIN = 'ADMIN', ('Quản trị viên')
         HOST = 'HOST', ('Chủ nhà')

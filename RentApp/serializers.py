@@ -3,7 +3,6 @@ from rest_framework.serializers import ModelSerializer
 from .models import *
 
 class UserSerializer(ModelSerializer):
-    role = User.get_role()
     class Meta:
         model = User
         fields = ['first_name', 'last_name', 'email', 'username', 'password', 'avatar_user', 'phone', 'role']
