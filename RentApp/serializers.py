@@ -25,7 +25,7 @@ class UserSerializer(ModelSerializer):
         return user
 
 class AccommodationSerializer(ModelSerializer):
-    onwer = UserSerializer()
+
     class Meta:
         model = Accommodation
         fields = '__all__'
