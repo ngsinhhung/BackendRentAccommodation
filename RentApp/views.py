@@ -74,7 +74,7 @@ class UserViewSet(viewsets.ModelViewSet, generics.ListAPIView, generics.Retrieve
 class PostViewSet(viewsets.ModelViewSet, generics.ListAPIView, generics.CreateAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
-    permission_classes = [OwnerAuAuthenticate]
+
     parser_classes=[MultiPartParser,FormParser]
     @action(methods=['POST'], detail=False, url_path='create_post', url_name='create-post')
     def create_post(self, request):
